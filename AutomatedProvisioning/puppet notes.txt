@@ -1,0 +1,39 @@
+# Import the module using the cli
+puppet module install puppetlabs-apache
+
+Add this stuff to /etc/puppet/manifests/site.pp
+
+# Declarations are here...
+class { 'apache':
+  default_mods        => false,
+  default_confd_files => false,
+}
+
+apache::vhost { 'first.example.com':
+  port    => '80',
+  docroot => '/var/www/first',
+}
+
+apache::vhost { 'second.example.com':
+  port    => '80',
+  docroot => '/var/www/second',
+}
+
+file { "/var/www/first/index.html":
+ file => file,
+ source => [
+    "/opt/files/example1.com",
+  ]
+}
+
+file { "/var/www/second/index.html":
+ file => file,
+ source => [
+    "/opt/files/example2.com",
+  ]
+}
+
+
+
+# apply using 
+puppet apply /path/to/site.pp --debug
