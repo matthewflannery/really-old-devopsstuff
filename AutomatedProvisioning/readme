@@ -1,0 +1,5 @@
+Summary: The scripts contained within this directory will perform the following.
+
+Running the powershell script will attach a VHD template which is, a base VM image containing puppetagent, and autoconfig_march.py stored as an init.d script. The py script will write the host of the json webapp server into /etc/hosts, some other administrative tasks, deletes its self and then reboots the VM. When the VM comes up, it will contact the webapp server which will return a hostname PUPPET-AGENT-X where X will increment
+
+The objective of this is so that essentially the powershell script can be ran a number of times to spin up X number of VMs, with puppet agent installed and configured so that a manifest can be applied en masse.
