@@ -1,0 +1,45 @@
+---
+- include: provision.yml
+# NodeJS and npm have now been installed
+
+# Let's clone the project with the correct branch
+
+- git: repo={{ project_gitpath }}
+       dest={{ project_target_scripts }}
+       version={{ project_git_branch }}
+       accept_hostkey=true
+       #update=false
+  sudo: true
+  sudo_user: "{{ project_name }}"
+
+# The project includes a config dir with a default config.json file, let's overwrite that with our own template. NOTE: config.j2 WILL NEED TO BE EDITED.
+
+- template: src={{ template_filename }}
+            dest={{ project_target_config_file_path }}
+            owner={{ project_name }}
+            group={{ project_name }}
+            backup=true
+  sudo: true
+  sudo_user: "{{ project_name }}"
+
+# Project requires googleanalytics package  (Documentation SEE HERE: https://www.npmjs.com/package/googleanalytics)
+
+- command: npm update
+  sudo: true
+  sudo_user: "{{ project_name }}"
+
+- command: npm install googleanalytics
+           chdir={{ project_target_scripts }}/
+  sudo: true
+  sudo_user: "{{ project_name }}"
+
+# The thing we just deployed is a NodeJS package, let's install and link it
+
+- command: npm install .
+           chdir={{ project_target_scripts }}/
+  sudo: true
+  sudo_user: "{{ project_name }}"
+
+- command: npm link .
+           chdir={{ project_target_scripts }}/
+  sudo: true

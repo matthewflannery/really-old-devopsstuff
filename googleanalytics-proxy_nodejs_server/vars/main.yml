@@ -1,0 +1,22 @@
+---
+### -- project deployment settings
+project_gitpath: git@gitlab.softix.com:development/ga-proxy.git #Verify this is correct name 
+project_git_branch: master
+project_name: ga-proxy
+project_target_root: "/home/{{ project_name }}"
+project_target_scripts: "{{ project_target_root }}/{{project_name}}"
+project_target_config_file_path: "{{ project_target_root }}/{{project_name}}/config/config.json"
+#############
+
+### -- Reference to the template file
+template_filename: config.j2
+# Note: should be enough to find anything in the magic directory roles/<thisrole>/templates
+#############
+
+### -- Settings to use in application config template
+server_port: 3128 # This will need to be changed to whtaever the proxy server port is
+#aws_profile: ticketek
+#aws_region: ap-southeast-2
+#kinesis_streamName: orders
+#kinesis_partitionKey: origin
+#############

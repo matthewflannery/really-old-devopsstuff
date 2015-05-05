@@ -1,0 +1,48 @@
+---
+- name: Create group
+  group: name={{ project_name }}
+         state=present
+  sudo: true
+
+- name: Create user.
+  user: home={{ project_target_root }}
+        name={{ project_name }}
+        group={{ project_name }}
+        state=present
+  sudo: true
+
+- name: Create the project directory.
+  file: state=directory
+        path={{ project_target_root }}
+        group={{ project_name }}
+        owner={{ project_name }}
+  sudo: true
+
+- name: Create the project ssh directory.
+  file: state=directory
+        path={{ project_target_root }}/.ssh
+        group={{ project_name }}
+        owner={{ project_name }}
+  sudo: true
+
+- name: Update the project directory.
+  file: group={{ project_name }} owner={{ project_name }} mode=755 state=directory path={{ project_target_root }}
+  sudo: true
+
+- name: Copy private ssh key
+  copy: src={{ ansible_ssh_keyfilename }}
+        dest={{ project_target_root }}/.ssh/id_rsa
+        mode=0600
+        group={{ project_name }}
+        owner={{ project_name }}
+  sudo: true
+
+- name: Copy public ssh key
+  copy: src={{ ansible_ssh_keyfilename }}.pub
+        dest={{ project_target_root }}/.ssh/id_rsa.pub
+        mode=0600
+        group={{ project_name }}
+        owner={{ project_name }}
+  sudo: true
+
+- debug: msg="Done provisioning."
